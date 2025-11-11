@@ -1,7 +1,7 @@
 from flask import Flask, render_template, jsonify, request
 import os
 from datetime import datetime, timedelta
-from database import db, Marker, init_database, AST
+from database import db, Marker, init_database, UTC
 from config import Config
 
 app = Flask(__name__)
@@ -10,11 +10,11 @@ app.config.from_object(Config)
 # Initialize database
 init_database(app)
 
-# Saint Kitts coordinates - Fort Street & Cayon Street intersection, Basseterre
+# Saint Kitts coordinates - Center of the island for better overview
 SAINT_KITTS_CENTER = {
-    'lat': 17.29700198349977,
-    'lng': -62.72387210886741,
-    'zoom': 14
+    'lat': 17.3433,  # Center of Saint Kitts island
+    'lng': -62.75,   # Center of Saint Kitts island
+    'zoom': 11       # Zoomed out to show whole island
 }
 
 @app.route('/')
@@ -53,8 +53,8 @@ def get_markers():
     """Get all active markers from database"""
     try:
         # Clean up expired markers and get active ones
-        now = datetime.now(AST)
-        print(f"Current time (AST): {now}")
+        now = datetime.now(UTC)
+        print(f"Current time (UTC): {now}")
         
         # Delete expired markers
         expired_count = Marker.query.filter(Marker.expires_at <= now).delete()

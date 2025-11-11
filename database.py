@@ -5,8 +5,8 @@ import pytz
 
 db = SQLAlchemy()
 
-# Define Saint Kitts timezone (GMT-4)
-AST = pytz.timezone('America/St_Kitts')
+# Use UTC for database storage to avoid timezone issues
+UTC = timezone.utc
 
 class Marker(db.Model):
     __tablename__ = 'markers'
@@ -15,15 +15,15 @@ class Marker(db.Model):
     latitude = db.Column(db.Float, nullable=False)
     longitude = db.Column(db.Float, nullable=False)
     marker_type = db.Column(db.String(10), nullable=False)
-    created_at = db.Column(db.DateTime, default=lambda: datetime.now(AST))
+    created_at = db.Column(db.DateTime, default=lambda: datetime.now(UTC))
     expires_at = db.Column(db.DateTime, nullable=False)
     
     def __init__(self, latitude, longitude, marker_type):
         self.latitude = latitude
         self.longitude = longitude
         self.marker_type = marker_type
-        # Set expiration to 1 hour from now in AST timezone
-        self.expires_at = datetime.now(AST) + timedelta(hours=1)
+        # Set expiration to 1 hour from now in UTC
+        self.expires_at = datetime.now(UTC) + timedelta(hours=1)
     
     def to_dict(self):
         return {
@@ -43,12 +43,13 @@ def init_database(app):
 
 def cleanup_expired_markers():
     """Remove markers that have expired (older than 1 hour)"""
-    current_time = datetime.now(AST)
+    current_time = datetime.now(UTC)
     expired_markers = Marker.query.filter(Marker.expires_at < current_time).delete()
     db.session.commit()
     
     if expired_markers > 0:
-        print(f"Cleaned up {expired_markers} expired markers")
+        print(f"Deleted {expired_markers} expired markers")
+    return expired_markers
     
     return expired_markers
 
@@ -61,14 +62,14 @@ def add_marker(latitude, longitude, marker_type):
 
 def get_active_markers():
     """Get all active (non-expired) markers"""
-    current_time = datetime.now(AST)
+    current_time = datetime.now(UTC)
     markers = Marker.query.filter(Marker.expires_at > current_time).order_by(Marker.created_at.desc()).all()
     return [marker.to_dict() for marker in markers]
 
 def check_marker_collision(latitude, longitude, marker_type, radius_meters=40):
     """Check if a marker can be placed at the given location (collision detection)"""
     import math
-    current_time = datetime.now(AST)
+    current_time = datetime.now(UTC)
     
     # Get all active markers of the same type
     existing_markers = Marker.query.filter(
