@@ -1,0 +1,32 @@
+# Core Flask dependencies
+Flask==2.3.3
+Werkzeug==2.3.7
+Flask-SQLAlchemy==3.1.1
+pytz==2024.1
+
+# Database dependencies
+psycopg2-binary==2.9.9
+SQLAlchemy==2.0.21
+
+# Production WSGI server
+gunicorn==21.2.0
+
+# Environment management
+python-dotenv==1.0.0
+
+# Development dependencies
+flask-cors==4.0.0
+
+# JSON handling for API responses
+requests==2.31.0
+
+# Optional: Database support (uncomment if needed)
+# SQLAlchemy==2.0.23
+# Flask-SQLAlchemy==3.1.1
+
+# Optional: Authentication (uncomment if needed)
+# Flask-Login==0.6.3
+
+# Optional: Form handling (uncomment if needed)
+# Flask-WTF==1.2.1
+# WTForms==3.1.0

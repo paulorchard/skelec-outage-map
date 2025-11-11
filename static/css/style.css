@@ -1,0 +1,615 @@
+/* Mobile-first CSS for Saint Kitts Outage Map */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    height: 100vh;
+    overflow: hidden;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f8f9fa;
+}
+
+/* Header Bar - 10% of viewport height */
+.header-bar {
+    height: 10vh;
+    background: white;
+    border-bottom: 2px solid rgba(0, 0, 0, 0.1);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    padding: 0 15px;
+}
+
+.header-bar h5,
+.header-bar .header-title {
+    font-weight: 600;
+    font-size: 1.4rem;
+    color: #333;
+    line-height: 1.5;
+    margin-bottom: 0px !important;
+    text-align: left;
+    margin-left: 0;
+    padding-left: 0;
+}
+
+.header-bar h5 i {
+    margin-left: 0;
+    margin-right: 8px;
+}
+
+.header-bar small {
+    font-size: 0.75rem;
+    color: #666;
+    line-height: 1;
+    display: block;
+    text-align: left;
+    margin-left: 0;
+    padding: 5px 0px;
+}
+
+.header-bar .container-fluid {
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.btn-outline-light {
+    border-width: 1px;
+    font-size: 0.8rem;
+    padding: 0.25rem 0.5rem;
+    border-color: #333;
+    color: #333;
+}
+
+.btn-outline-light:hover {
+    background-color: #333;
+    border-color: #333;
+    color: white;
+}
+
+/* Status Counters */
+.status-counters {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+.counter-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.counter-dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.counter-dot.reports {
+    background-color: #dc3545;
+}
+
+.counter-dot.confirmations {
+    background-color: #007bff;
+}
+
+.counter-text {
+    font-size: 0.75rem;
+    color: #666;
+    line-height: 1;
+    font-family: sans-serif;
+}
+
+.counter-number {
+    font-weight: bold;
+    color: #333;
+    font-size: 0.85rem;
+}
+
+/* Map Container - 90% of viewport height */
+#map-container {
+    height: 90vh;
+    margin-top: 10vh;
+    position: relative;
+}
+
+#map {
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+/* Leaflet Zoom Control Positioning Fix */
+.leaflet-control-zoom {
+    position: absolute !important;
+    bottom: 40px !important; /* Changed from 0px to 40px */
+    left: 0px !important;
+    z-index: 1000 !important;
+}
+
+/* Ensure zoom controls don't move on mobile */
+.leaflet-bottom.leaflet-left {
+    position: absolute !important;
+    bottom: 40px !important; /* Changed from 0px to 40px */
+    left: 0px !important;
+}
+
+/* Map Crosshair */
+.map-crosshair {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 500;
+}
+
+.crosshair-horizontal {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background-color: rgba(0, 0, 0, 0.5);
+    transform: translateY(-50%);
+}
+
+.crosshair-vertical {
+    position: absolute;
+    left: 50%;
+    top: 0;
+    width: 1px;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    transform: translateX(-50%);
+}
+
+/* Button Container */
+.button-container {
+    position: absolute;
+    bottom: 70px; /* Changed from 30px to 70px (40px higher) */
+    right: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    z-index: 1000;
+}
+
+/* Report Outage Button */
+.report-outage-btn {
+    position: relative;
+    background: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 25px;
+    padding: 12px 20px;
+    font-size: 13px; /* Reduced from 14px to fit in 160px width */
+    font-weight: 600;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Center the content horizontally */
+    gap: 6px; /* Reduced from 8px to fit better */
+    transition: all 0.3s ease;
+    width: 160px; /* Fixed width instead of min-width */
+    white-space: nowrap; /* Prevent text wrapping */
+}
+
+/* Working on it Button */
+.working-on-it-btn {
+    position: relative;
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 25px;
+    padding: 12px 20px;
+    font-size: 13px; /* Reduced from 14px to fit in 160px width */
+    font-weight: 600;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px; /* Reduced from 8px to fit better */
+    transition: all 0.3s ease;
+    width: 160px; /* Fixed width instead of min-width */
+    white-space: nowrap;
+}
+
+.working-on-it-btn:hover {
+    background: #0056b3;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.4);
+}
+
+.working-on-it-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
+
+.working-on-it-btn:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
+
+.working-on-it-btn:disabled:hover {
+    background: #5bc0de;
+    transform: none;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
+
+.report-outage-btn:hover {
+    background: #c82333;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.4);
+}
+
+.report-outage-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
+
+/* Marker scaling classes for zoom levels below 14 (zoomed out) */
+.marker-scale-13 .pin-marker { transform: scale(0.9); transform-origin: center bottom; }
+.marker-scale-12 .pin-marker { transform: scale(0.8); transform-origin: center bottom; }
+.marker-scale-11 .pin-marker { transform: scale(0.7); transform-origin: center bottom; }
+.marker-scale-10 .pin-marker { transform: scale(0.6); transform-origin: center bottom; }
+
+.report-outage-btn .warning-icon {
+    width: 0;
+    height: 0;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-bottom: 10px solid white;
+    position: relative;
+}
+
+.report-outage-btn .warning-icon::after {
+    content: '!';
+    position: absolute;
+    left: -3px;
+    top: 2px;
+    color: #dc3545;
+    font-size: 8px;
+    font-weight: bold;
+}
+
+.working-on-it-btn .info-icon {
+    width: 12px;
+    height: 12px;
+    border: 2px solid white;
+    border-radius: 50%;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.working-on-it-btn .info-icon::after {
+    content: 'i';
+    color: white;
+    font-size: 8px;
+    font-weight: bold;
+    font-style: italic;
+}
+
+/* Loading Overlay */
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+    color: white;
+}
+
+.loading-spinner {
+    text-align: center;
+}
+
+.loading-overlay.hidden {
+    display: none;
+}
+
+/* Google Maps style red location pin marker */
+.google-maps-pin {
+    background: none !important;
+    border: none !important;
+}
+
+.pin-marker {
+    position: relative;
+    width: 23px;
+    height: 28px; /* Changed from 23px to 28px */
+    /* Ensure the pin's bottom point aligns with the coordinate */
+    transform-origin: center bottom;
+}
+
+.pin-marker::before {
+    content: '';
+    position: absolute;
+    width: 23px;
+    height: 23px;
+    background: #d61a09;
+    border-radius: 50% 50% 50% 0;
+    transform: rotate(-45deg);
+    left: 0;
+    top: 0;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.35);
+}
+
+.pin-marker::after {
+    content: '';
+    position: absolute;
+    width: 9px;
+    height: 9px;
+    background: #ffffff;
+    border-radius: 50%;
+    left: 7px;
+    top: 7px;
+    z-index: 1;
+}
+
+/* Blue marker for working on it */
+.pin-marker.blue-marker::before {
+    background: #007bff; /* Blue color instead of red */
+}
+
+/* Custom Leaflet Marker Icons */
+.custom-marker {
+    border-radius: 50%;
+    border: 3px solid white;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.marker-power {
+    background-color: #dc3545;
+}
+
+.marker-internet {
+    background-color: #fd7e14;
+}
+
+.marker-water {
+    background-color: #0dcaf0;
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+    .header-bar h5 {
+        font-size: 1rem;
+    }
+    
+    .header-bar small {
+        font-size: 0.7rem;
+    }
+    
+    /* Ensure zoom controls stay in bottom left on mobile */
+    .leaflet-control-zoom {
+        bottom: 40px !important; /* Changed from 0px to 40px */
+        left: 0px !important;
+    }
+    
+    .leaflet-bottom.leaflet-left {
+        bottom: 40px !important; /* Changed from 0px to 40px */
+        left: 0px !important;
+    }
+    
+    .legend-panel {
+        max-width: 200px;
+        right: 5px;
+        top: 5px;
+    }
+    
+    .legend-content {
+        padding: 10px;
+    }
+    
+    .legend-item {
+        font-size: 0.8rem;
+    }
+}
+
+/* Animation for refresh button */
+.fa-sync-alt.spinning {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* Hide scroll bars but keep functionality */
+::-webkit-scrollbar {
+    width: 0px;
+    background: transparent;
+}
+
+/* Popup styles for time remaining */
+.marker-popup {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    min-width: 200px;
+}
+
+.popup-header {
+    padding: 8px 12px;
+    border-radius: 4px 4px 0 0;
+    color: white;
+    font-weight: bold;
+    text-align: center;
+}
+
+.popup-header.outage {
+    background: #dc3545;
+}
+
+.popup-header.working {
+    background: #007bff;
+}
+
+.popup-content {
+    padding: 10px 12px;
+    background: white;
+    border-radius: 0 0 4px 4px;
+}
+
+.time-info {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.created-time {
+    font-size: 13px;
+    color: #666;
+}
+
+.remaining-time {
+    font-weight: bold;
+    font-size: 14px;
+    padding: 4px 8px;
+    border-radius: 3px;
+    text-align: center;
+}
+
+.remaining-time.expired {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+.remaining-time.expiring-soon {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.remaining-time.expiring-medium {
+    background: #cce5ff;
+    color: #004085;
+}
+
+.remaining-time.expiring-later {
+    background: #d4edda;
+    color: #155724;
+}
+
+/* iOS Location Dialog Styles */
+.ios-location-dialog {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10000;
+}
+
+.ios-dialog-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.ios-dialog-content {
+    background: white;
+    border-radius: 12px;
+    max-width: 400px;
+    width: 100%;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+}
+
+.ios-dialog-header {
+    background: #007bff;
+    color: white;
+    padding: 15px 20px;
+    text-align: center;
+}
+
+.ios-dialog-header h3 {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.ios-dialog-body {
+    padding: 20px;
+}
+
+.ios-dialog-body p {
+    margin: 0 0 15px 0;
+    color: #333;
+    font-size: 0.95rem;
+    line-height: 1.4;
+}
+
+.ios-instructions {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 15px;
+    border-left: 4px solid #007bff;
+}
+
+.ios-instructions p {
+    margin: 0;
+    font-size: 0.85rem;
+    color: #555;
+    line-height: 1.5;
+}
+
+.ios-dialog-footer {
+    padding: 15px 20px;
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    background: #f8f9fa;
+}
+
+.ios-dialog-btn {
+    padding: 8px 16px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    background: white;
+    color: #666;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.ios-dialog-btn:hover {
+    background: #f5f5f5;
+}
+
+.ios-dialog-btn.ios-primary {
+    background: #007bff;
+    color: white;
+    border-color: #007bff;
+}
+
+.ios-dialog-btn.ios-primary:hover {
+    background: #0056b3;
+    border-color: #0056b3;
+}

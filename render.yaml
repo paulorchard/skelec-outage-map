@@ -1,0 +1,18 @@
+services:
+  - type: web
+    name: outage-map
+    env: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.9
+      - key: DATABASE_URL
+        fromDatabase:
+          name: outage-map-db
+          property: connectionString
+
+databases:
+  - name: outage-map-db
+    plan: free
