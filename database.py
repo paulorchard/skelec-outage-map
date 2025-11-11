@@ -22,17 +22,35 @@ class Marker(db.Model):
         self.latitude = latitude
         self.longitude = longitude
         self.marker_type = marker_type
-        # Set expiration to 1 hour from now in UTC
-        self.expires_at = datetime.now(UTC) + timedelta(hours=1)
+    # Set expiration to 1 hour from now in UTC
+    self.expires_at = datetime.now(UTC) + timedelta(hours=1)
     
     def to_dict(self):
+        def _iso_utc(dt):
+            if dt is None:
+                return None
+            # If datetime is naive, assume it's UTC; make it timezone-aware
+            if dt.tzinfo is None:
+                dt = dt.replace(tzinfo=UTC)
+            # Convert to UTC and use ISO format with Z suffix for clarity
+            # Limit to milliseconds so JS Date parsing is consistent
+            try:
+                iso = dt.astimezone(UTC).isoformat(timespec='milliseconds')
+            except TypeError:
+                # Fallback if timespec not supported in this Python version
+                iso = dt.astimezone(UTC).isoformat()
+            # Replace '+00:00' with 'Z' for a compact UTC indicator
+            if iso.endswith('+00:00'):
+                iso = iso.replace('+00:00', 'Z')
+            return iso
+
         return {
             'id': self.id,
             'lat': self.latitude,
             'lng': self.longitude,
             'type': self.marker_type,
-            'created_at': self.created_at.isoformat(),
-            'expires_at': self.expires_at.isoformat()
+            'created_at': _iso_utc(self.created_at),
+            'expires_at': _iso_utc(self.expires_at)
         }
 
 def init_database(app):
@@ -42,7 +60,7 @@ def init_database(app):
     print("Database initialized successfully")
 
 def cleanup_expired_markers():
-    """Remove markers that have expired (older than 1 hour)"""
+    """Remove markers that have expired (older than 1 hour)."""
     current_time = datetime.now(UTC)
     expired_markers = Marker.query.filter(Marker.expires_at < current_time).delete()
     db.session.commit()

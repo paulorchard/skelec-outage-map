@@ -32,18 +32,25 @@ def get_outages():
     # No hardcoded outages - only user-generated markers from database will show
     sample_outages = []
     
+    # Use UTC ISO timestamps with Z suffix
+    last_updated = datetime.now(UTC).astimezone(UTC).isoformat()
+    if last_updated.endswith('+00:00'):
+        last_updated = last_updated.replace('+00:00', 'Z')
     return jsonify({
         'outages': sample_outages,
-        'last_updated': datetime.now().isoformat(),
+        'last_updated': last_updated,
         'total_outages': len(sample_outages)
     })
 
 @app.route('/api/status')
 def api_status():
     """API endpoint to check application status"""
+    timestamp = datetime.now(UTC).astimezone(UTC).isoformat()
+    if timestamp.endswith('+00:00'):
+        timestamp = timestamp.replace('+00:00', 'Z')
     return jsonify({
         'status': 'running',
-        'timestamp': datetime.now().isoformat(),
+        'timestamp': timestamp,
         'version': '1.0.0',
         'location': 'Saint Kitts and Nevis'
     })
@@ -116,8 +123,8 @@ def add_new_marker():
                 'error': 'Invalid marker type. Must be "outage" or "working"'
             }), 400
             
-        # Check for nearby markers (40m radius)
-        now = datetime.utcnow()
+        # Check for nearby markers (40m radius) - use timezone-aware UTC
+        now = datetime.now(UTC)
         nearby_markers = Marker.query.filter(
             Marker.marker_type == marker_type,
             Marker.expires_at > now

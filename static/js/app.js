@@ -222,9 +222,9 @@ async function placeUserReportMarker(lat, lng) {
         // Add to user report markers array
         userReportMarkers.push(marker);
         
-        // Add popup with time remaining information (1 hour from now)
-        const now = new Date();
-        const expiresAt = new Date(now.getTime() + 60 * 60 * 1000); // 1 hour from now
+    // Add popup with time remaining information (1 hour from now)
+    const now = new Date();
+    const expiresAt = new Date(now.getTime() + 60 * 60 * 1000); // 1 hour from now
         const popupContent = createTimeRemainingPopup('outage', expiresAt.toISOString());
         marker.bindPopup(popupContent);
 
@@ -347,9 +347,9 @@ async function placeWorkingOnItMarker(lat, lng) {
         // Add to working on it markers array
         workingOnItMarkers.push(marker);
         
-        // Add popup with time remaining information (1 hour from now)
-        const now = new Date();
-        const expiresAt = new Date(now.getTime() + 60 * 60 * 1000); // 1 hour from now
+    // Add popup with time remaining information (1 hour from now)
+    const now = new Date();
+    const expiresAt = new Date(now.getTime() + 60 * 60 * 1000); // 1 hour from now
         const popupContent = createTimeRemainingPopup('working', expiresAt.toISOString());
         marker.bindPopup(popupContent);
 
