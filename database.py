@@ -22,8 +22,8 @@ class Marker(db.Model):
         self.latitude = latitude
         self.longitude = longitude
         self.marker_type = marker_type
-    # Set expiration to 1 hour from now in UTC
-    self.expires_at = datetime.now(UTC) + timedelta(hours=1)
+        # Set expiration to 1 hour from now in UTC
+        self.expires_at = datetime.now(UTC) + timedelta(hours=1)
     
     def to_dict(self):
         def _iso_utc(dt):
@@ -67,8 +67,6 @@ def cleanup_expired_markers():
     
     if expired_markers > 0:
         print(f"Deleted {expired_markers} expired markers")
-    return expired_markers
-    
     return expired_markers
 
 def add_marker(latitude, longitude, marker_type):
