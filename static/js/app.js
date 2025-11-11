@@ -225,7 +225,7 @@ async function placeUserReportMarker(lat, lng) {
         // Add popup with time remaining information (1 hour from now)
         const now = new Date();
         const expiresAt = new Date(now.getTime() + 60 * 60 * 1000); // 1 hour from now
-        const popupContent = createTimeRemainingPopup('outage', expiresAt.toISOString(), now.toISOString());
+        const popupContent = createTimeRemainingPopup('outage', expiresAt.toISOString());
         marker.bindPopup(popupContent);
 
         // Start timer when popup opens
@@ -301,7 +301,7 @@ function addUserReportMarkerFromDB(lat, lng, expiresAt, createdAt) {
     marker.createdAt = new Date(createdAt);
 
     // Add popup with time remaining information
-    const popupContent = createTimeRemainingPopup('outage', expiresAt, createdAt);
+    const popupContent = createTimeRemainingPopup('outage', expiresAt);
     marker.bindPopup(popupContent);
 
     // Start timer when popup opens
@@ -350,7 +350,7 @@ async function placeWorkingOnItMarker(lat, lng) {
         // Add popup with time remaining information (1 hour from now)
         const now = new Date();
         const expiresAt = new Date(now.getTime() + 60 * 60 * 1000); // 1 hour from now
-        const popupContent = createTimeRemainingPopup('working', expiresAt.toISOString(), now.toISOString());
+        const popupContent = createTimeRemainingPopup('working', expiresAt.toISOString());
         marker.bindPopup(popupContent);
 
         // Start timer when popup opens
@@ -414,7 +414,7 @@ function addWorkingOnItMarkerFromDB(lat, lng, expiresAt, createdAt) {
     }).addTo(map);
 
     // Add popup with time remaining information
-    const popupContent = createTimeRemainingPopup('working', expiresAt, createdAt);
+    const popupContent = createTimeRemainingPopup('working', expiresAt);
     marker.bindPopup(popupContent);
 
     // Start timer when popup opens
@@ -434,20 +434,11 @@ function addWorkingOnItMarkerFromDB(lat, lng, expiresAt, createdAt) {
 }
 
 // Create popup content showing time remaining
-function createTimeRemainingPopup(type, expiresAt, createdAt) {
-    // Parse dates and adjust for AST timezone (GMT-4)
-    const creationDate = new Date(createdAt);
+function createTimeRemainingPopup(type, expiresAt) {
+    // Parse dates
     const expirationDate = new Date(expiresAt);
     
-    // Format creation time in AST
-    const timeOptions = { 
-        hour: 'numeric', 
-        minute: 'numeric',
-        second: 'numeric',
-        timeZone: 'America/St_Kitts'
-    };
     const typeText = type === 'outage' ? 'Outage Report' : 'Working On It';
-    const createdText = creationDate.toLocaleTimeString('en-US', timeOptions);
     
     // Calculate initial time remaining
     const now = new Date();
@@ -464,7 +455,6 @@ function createTimeRemainingPopup(type, expiresAt, createdAt) {
             </div>
             <div class="popup-content">
                 <div class="time-info">
-                    <div class="created-time">Reported: ${createdText} AST</div>
                     <div class="remaining-time" data-expiration="${expiresAt}">${initialTimeText}</div>
                 </div>
             </div>
@@ -768,7 +758,7 @@ function addOutageMarker(outage) {
     marker.createdAt = new Date(outage.created_at);
 
     // Add popup with countdown
-    const popupContent = createTimeRemainingPopup('outage', outage.expires_at, outage.created_at);
+    const popupContent = createTimeRemainingPopup('outage', outage.expires_at);
     marker.bindPopup(popupContent);
 
     // Start countdown when popup opens
