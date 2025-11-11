@@ -440,9 +440,10 @@ function createTimeRemainingPopup(type, expiresAt) {
     
     const typeText = type === 'outage' ? 'Outage Report' : 'Working On It';
     
-    // Calculate initial time remaining
-    const now = new Date();
-    const timeRemaining = expirationDate - now;
+    // Calculate initial time remaining (using UTC times)
+    const nowUTC = Date.now(); // UTC milliseconds since epoch
+    const expirationUTC = new Date(expiresAt).getTime(); // UTC milliseconds
+    const timeRemaining = expirationUTC - nowUTC;
     
     const minutes = Math.floor(timeRemaining / (1000 * 60));
     const seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
@@ -481,8 +482,8 @@ function startCountdownTimer(element, expirationDate) {
             return; // Stop timer if element is no longer in DOM
         }
         
-        const now = new Date();
-        const timeRemaining = expirationDate - now;
+        const nowUTC = Date.now(); // UTC milliseconds since epoch
+        const timeRemaining = expirationDate.getTime() - nowUTC;
         
         let timeText = '';
         let statusClass = '';
